@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Portal de administrador</title>
+</head>
+<body>
+    <fieldset>
+        <legend>Consultas</legend>
+        <button id="Todos">Todos los eventos</button> <br>
+        <input type="text" name="ID del evento" id="IDOper">
+        <button id="Uno">Buscar evento</button>
+        <button id="Borrar">Borrar Este evento</button> <br>
+        <textarea id="Resultados" cols="80" rows="15" disabled></textarea><br>
+        <button id="LimpiadorDeCampos">Limpiar este campo</button>
+    </fieldset>
+    <br>
+
+    <form id="FormAgregar">
+        <fieldset>
+            <legend>Agregar un evento</legend>
+            <input type="text" name="ID" id="IdAg" placeholder="ID" pattern="[1-9]+" required minlength="1">
+            <input type="text" name="Nombre" id="NomAg" placeholder="Nombre" required minlength="1">
+            <input type="text" name="Descripción" id="DecAg" placeholder="Descripción" required minlength="1">
+            <input type="text" name="Lugar" id="LugAg" placeholder="Lugar" required minlength="1">
+            <input type="submit" value="Agregar" id="Agregar">
+        </fieldset>
+    </form>
+    <br>
+
+    <form id="FormModificar">
+        <fieldset>
+            <legend>Modificar un evento</legend>
+            <input type="text" name="ID" id="IdModBus" placeholder="ID a modificar" pattern="[1-9]+" required minlength="1">
+            <input type="text" name="ID" id="IdMod" placeholder="Nuevo ID" pattern="[1-9]+" required minlength="1">
+            <input type="text" name="Nombre" id="NomMod" placeholder="Nombre" required minlength="1">
+            <input type="text" name="Descripción" id="DecMod" placeholder="Descripción" required minlength="1">
+            <input type="text" name="Lugar" id="LugMod" placeholder="Lugar" required minlength="1">
+            <input type="submit" id="Modificar" value="Modificar los datos"> <br>
+            <button id="Modificar">Modificar los datos</button> <br>
+        </fieldset>
+    </form>
+    <br><br>
+    
+    <p id="lel">    </p>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+        const Todos = document.getElementById("Todos");
+        const Uno = document.getElementById("Uno");
+        const Datos = document.getElementById("Resultados");
+        const Borrar = document.getElementById("Borrar");
+        const Agregar = document.getElementById("Agregar");
+        const IDOper = document.getElementById("IDOper");
+        const Modificador = document.getElementById("Modificar");
+        const Limpiar = document.getElementById("LimpiadorDeCampos");
+        Todos.addEventListener('click',ObtenerEventos);
+        Uno.addEventListener('click',SoloUno);
+        Borrar.addEventListener('click', Borrado);
+        Agregar.addEventListener('click',Agregando);
+        Modificador.addEventListener('click',Modificando);
+        Limpiar.addEventListener('click', LimpiarElCampo)
+
+        function LimpiarElCampo (e)
+        {
+            Datos.innerHTML=""
+        }
+
+        function ObtenerEventos(e)
+        {
+            e.preventDefault();
+            Datos.innerHTML=""
+            $.ajax(
+            {
+                url : '/Eventos',
+                method : 'GET',
+                success : function(data)
+                {
+                    console.log(data);
+                    Datos.innerHTML=JSON.stringify(data, null, 2);
+                },
+        
+                error: function(err)
+                {
+                    Datos.innerHTML="Error"
+                }
+            });
+        } 
+
+        
+        function SoloUno(e)
+        {
+            e.preventDefault();
+            Datos.innerHTML=""
+            const Enlace = '/Eventos/'+IDOper.value;
+            $.ajax(
+            {
+                url : Enlace,
+                method : 'GET',
+                success : function(data)
+                {
+                    console.log(data);
+                    Datos.innerHTML=JSON.stringify(data, null, 2);
+                },
+        
+                error: function(err)
+                {
+                    Datos.innerHTML="Error"
+                }
+            });
+        }
+
+        function Agregando(e)
+        {
+            e.preventDefault();
+            Datos.innerHTML=""
+            var Insercion=
+            {
+                "ID":parseInt(IdAg.value),
+                "Nombre":NomAg.value,
+                "Descripción":DecAg.value,
+                "Lugar":LugAg.value
+            }
+            $.ajax(
+            {
+                url : '/Eventos',
+                method : 'POST',
+                crossDomain : true,
+                data : JSON.stringify(Insercion),
+                dataType : "json",
+                contentType : "application/json",
+                success : function(data)
+                {
+                    console.log(data);
+                    Datos.innerHTML=JSON.stringify(data, null, 2);
+                },
+        
+                error: function(err)
+                {
+                    Datos.innerHTML="Error"
+                }
+            });
+        }
+
+        function Modificando(e)
+        {
+            e.preventDefault();
+            Datos.innerHTML=""
+            const Enlace = '/Eventos/'+IdModBus.value;
+            var Insercion=
+            {
+                "ID":parseInt(IdMod.value),
+                "Nombre":NomMod.value,
+                "Descripción":DecMod.value,
+                "Lugar":LugMod.value
+            }
+            $.ajax(
+            {
+                url : Enlace,
+                method : 'PUT',
+                crossDomain : true,
+                data : JSON.stringify(Insercion),
+                dataType : "json",
+                contentType : "application/json",
+                success : function(data)
+                {
+                    console.log(data);
+                    Datos.innerHTML=JSON.stringify(data, null, 2);
+                },
+        
+                error: function(err)
+                {
+                    Datos.innerHTML="Error"
+                }
+            });
+        }
+
+        function Borrado(e)
+        {
+            e.preventDefault();
+            Datos.innerHTML=""
+            const Enlace = '/Eventos/'+IDOper.value;
+            $.ajax(
+            {
+                url : Enlace,
+                method : 'DELETE',
+                success : function(data)
+                {
+                    console.log(data);
+                    Datos.innerHTML=JSON.stringify(data, null, 2);
+                },
+        
+                error: function(err)
+                {
+                    Datos.innerHTML="Error"
+                }
+            });
+        }
+    </script>
+</body>
+</html>
