@@ -23,7 +23,8 @@
             <input type="text" name="Nombre" id="NomAg" placeholder="Nombre" required minlength="1">
             <input type="text" name="Descripción" id="DecAg" placeholder="Descripción" required minlength="1">
             <input type="text" name="Lugar" id="LugAg" placeholder="Lugar" required minlength="1">
-            <input type="submit" value="Agregar" id="Agregar">
+            <input type="submit" value="Agregar" id="Agregar"> <br>
+            <button id="LimpiadorDeCampos2">Limpiar estos campos</button>
         </fieldset>
     </form>
     <br>
@@ -37,7 +38,7 @@
             <input type="text" name="Descripción" id="DecMod" placeholder="Descripción" required minlength="1">
             <input type="text" name="Lugar" id="LugMod" placeholder="Lugar" required minlength="1">
             <input type="submit" id="Modificar" value="Modificar los datos"> <br>
-            <button id="Modificar">Modificar los datos</button> <br>
+            <button id="LimpiadorDeCampos3">Limpiar estos campos</button>
         </fieldset>
     </form>
     <br><br>
@@ -55,15 +56,36 @@
         const IDOper = document.getElementById("IDOper");
         const Modificador = document.getElementById("Modificar");
         const Limpiar = document.getElementById("LimpiadorDeCampos");
+        const Limpiar2 = document.getElementById("LimpiadorDeCampos2");
+        const Limpiar3 = document.getElementById("LimpiadorDeCampos3");
         Todos.addEventListener('click',ObtenerEventos);
         Uno.addEventListener('click',SoloUno);
         Borrar.addEventListener('click', Borrado);
         Agregar.addEventListener('click',Agregando);
         Modificador.addEventListener('click',Modificando);
-        Limpiar.addEventListener('click', LimpiarElCampo)
+        Limpiar.addEventListener('click', LimpiarElCampo);
+        Limpiar2.addEventListener('click', LimpiarElCampo2);
+        Limpiar3.addEventListener('click', LimpiarElCampo3);
 
         function LimpiarElCampo (e)
         {
+            Datos.innerHTML=""
+        }
+        function LimpiarElCampo2 (e)
+        {
+            IdAg.value = "";
+            NomAg.value = "";
+            DecAg.value = "";
+            LugAg.value = "";
+            Datos.innerHTML=""
+        }
+        function LimpiarElCampo3 (e)
+        {
+            IdModBus.value = "";
+            IdMod.value = "";
+            NomMod.value = "";
+            DecMod.value = "";
+            LugMod.value = "";
             Datos.innerHTML=""
         }
 
